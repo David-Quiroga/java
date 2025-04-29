@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  peliculas1:
+    image: peliculas:1
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - target: 8080
+        published: 8012
+        protocol: tcp
+        mode: host
+    networks:
+      - prueba1_net
+  
+  dbpeliculas1_1:
+    image: postgres:17.4
+    environment:
+      - TZ=America/Guayaquil
+      - POSTGRES_DB=peliculas1
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - pg_peliculas1:/var/lib/postgresql/data/pgdata
+    networks:
+      - peliculas1_net
+
+volumes:
+  pg_peliculas1:
+    external: true
+
+networks:
+  peliculas1_net:
+    external: true
